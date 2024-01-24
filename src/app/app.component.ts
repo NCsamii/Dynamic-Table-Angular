@@ -7,4 +7,17 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'dynamicTable';
+  columns = [
+    {
+      name: 'id',
+      displayName: 'شناسه'
+    }]
+  tableData = {
+    columns: [
+      {keyName: 'id_dp', label: 'شناسه', type: 'text'}
+    ],
+    row: [],
+    param: '',
+    url: 'document-packages-general'
+  }
 }
