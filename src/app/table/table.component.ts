@@ -1,4 +1,5 @@
-import {Component, Input} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
+import {Table} from "../../shared/interfaces/table";
 
 
 @Component({
@@ -6,20 +7,24 @@ import {Component, Input} from '@angular/core';
   templateUrl: './table.component.html',
   styleUrls: ['./table.component.sass']
 })
-export class TableComponent {
+export class TableComponent implements OnInit {
 
-  @Input() set tableData(table: any) {
+  @Input() set tableData(table: Table) {
     this.displayedColumns = this.displayedColumns.concat(table.columns.map((x: any) => x.keyName))
     this.tableElements = table
   }
 
 
   displayedColumns: string[] = [];
-  tableElements: any;
+  tableElements: Table;
   dataSource: any;
   columns: any[] = []
 
   constructor() {
+  }
+
+  ngOnInit(): void {
+    this.getData()
   }
 
   getNestedValue(obj: any, column: any, path: string): any {
@@ -30,4 +35,9 @@ export class TableComponent {
     }
     return data != null ? data : '-'
   }
+
+  getData() {
+
+  }
+
 }

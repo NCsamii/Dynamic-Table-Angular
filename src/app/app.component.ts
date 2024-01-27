@@ -18,6 +18,6 @@ export class AppComponent {
     ],
     row: [],
     param: '',
-    url: 'document-packages-general'
+    url: 'https://random-data-api.com/api/users/random_user'
   }
 }
