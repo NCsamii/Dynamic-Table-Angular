@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import {Table} from "../shared/interfaces/table";
 
 @Component({
   selector: 'app-root',
@@ -12,12 +13,11 @@ export class AppComponent {
       name: 'id',
       displayName: 'شناسه'
     }]
-  tableData = {
+  tableData:Table = {
     columns: [
-      {keyName: 'id_dp', label: 'شناسه', type: 'text'}
+      {keyName: 'id_dp', label: 'شناسه'}
     ],
     row: [],
-    param: '',
-    url: 'https://random-data-api.com/api/users/random_user'
+    url: 'https://65c0823a25a83926ab966927.mockapi.io/api/v1/users'
   }
 }

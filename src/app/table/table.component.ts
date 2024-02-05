@@ -8,17 +8,15 @@ import {Table} from "../../shared/interfaces/table";
   styleUrls: ['./table.component.sass']
 })
 export class TableComponent implements OnInit {
-
-  @Input() set tableData(table: Table) {
-    this.displayedColumns = this.displayedColumns.concat(table.columns.map((x: any) => x.keyName))
-    this.tableElements = table
-  }
-
-
   displayedColumns: string[] = [];
   tableElements: Table;
   dataSource: any;
   columns: any[] = []
+
+  @Input() set tableData(table: Table) {
+    this.tableElements = table
+    this.displayedColumns = this.displayedColumns.concat(table.columns.map((x: any) => x.keyName))
+  }
 
   constructor() {
   }
