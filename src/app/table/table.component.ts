@@ -1,6 +1,8 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {AfterViewInit, Component, Input, OnInit, ViewChild} from '@angular/core';
 import {Table} from "../../shared/interfaces/table";
 import {TableService} from "../../shared/services/table.service";
+import {BehaviorSubject, switchMap} from "rxjs";
+import {MatPaginator} from "@angular/material/paginator";
 
 
 @Component({
@@ -8,12 +10,15 @@ import {TableService} from "../../shared/services/table.service";
   templateUrl: './table.component.html',
   styleUrls: ['./table.component.sass']
 })
-export class TableComponent implements OnInit {
+export class TableComponent implements OnInit ,AfterViewInit{
   displayedColumns: string[] = [];
   tableElements: Table;
   dataSource: any;
   columns: any[] = []
-
+  resultsLength = 0;
+  params = new BehaviorSubject({})
+  params$ = this.params.asObservable()
+  @ViewChild(MatPaginator) paginator: MatPaginator;
   @Input() set tableData(table: Table) {
     this.tableElements = table
     this.displayedColumns = this.displayedColumns.concat(table.columns.map((x: any) => x.keyName))
@@ -25,7 +30,7 @@ export class TableComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getData()
+
   }
 
   getNestedValue(obj: any, column: any, path: string): any {
@@ -38,16 +43,18 @@ export class TableComponent implements OnInit {
   }
 
   getData() {
-    this.apiService.getData(this.tableElements.url, this.tableElements.offset, this.tableElements.limit).subscribe({
-      next: (response: any) => {
-        this.dataSource = response
-      },
-      error: error => {
+    console.log(2 , this.paginator.pageIndex)
+    this.params$.pipe(switchMap(() => {
+      return this.apiService.getData(this.tableElements.url, this.tableElements.offset, this.tableElements.limit)
+    })).subscribe((response: any) => {
+      this.resultsLength = response.length;
+      this.dataSource = response
+    })
 
-      },
-      complete: () => {
-      }
-    });
+  }
+
+  ngAfterViewInit(): void {
+    this.getData()
   }
 
 }
