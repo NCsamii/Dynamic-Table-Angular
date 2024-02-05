@@ -13,11 +13,11 @@ export class TableService {
   constructor(private http: HttpClient) {
   }
 
-  getData(url: string) {
+  getData(url: string, offset: number | undefined, limit: number | undefined) {
     return this.http.get<any>(url)
   }
 
-  public refreshTable(value: T) {
+  public refreshTable(value: any) {
     this.refreshObject.next(value)
   }
 }

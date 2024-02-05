@@ -1,5 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {Table} from "../../shared/interfaces/table";
+import {TableService} from "../../shared/services/table.service";
 
 
 @Component({
@@ -16,9 +17,11 @@ export class TableComponent implements OnInit {
   @Input() set tableData(table: Table) {
     this.tableElements = table
     this.displayedColumns = this.displayedColumns.concat(table.columns.map((x: any) => x.keyName))
+    this.tableElements.limit = this.tableElements.limit == null ? 1 : this.tableElements.limit
+    this.tableElements.offset = this.tableElements.offset == null ? 10 : this.tableElements.offset
   }
 
-  constructor() {
+  constructor(private apiService: TableService) {
   }
 
   ngOnInit(): void {
@@ -35,7 +38,16 @@ export class TableComponent implements OnInit {
   }
 
   getData() {
+    this.apiService.getData(this.tableElements.url, this.tableElements.offset, this.tableElements.limit).subscribe({
+      next: (response: any) => {
+        this.dataSource = response
+      },
+      error: error => {
 
+      },
+      complete: () => {
+      }
+    });
   }
 
 }
