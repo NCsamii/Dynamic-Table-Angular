@@ -24,8 +24,6 @@ export class TableComponent implements OnInit, AfterViewInit {
   @Input() set tableData(table: Table) {
     this.tableElements = table
     this.displayedColumns = this.displayedColumns.concat(table.columns.map((x: any) => x.keyName))
-    this.tableElements.limit = this.tableElements.limit == null ? 1 : this.tableElements.limit
-    this.tableElements.offset = this.tableElements.offset == null ? 10 : this.tableElements.offset
   }
 
   constructor(private apiService: TableService) {

@@ -17,7 +17,6 @@ export class AppComponent {
     columns: [
       {keyName: 'id', label: 'شناسه'}
     ],
-    row: [],
     url: 'https://65c0823a25a83926ab966927.mockapi.io/api/v1/users'
   }
 }
