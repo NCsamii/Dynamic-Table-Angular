@@ -1,5 +1,4 @@
-<table mat-table [dataSource]="dataSource" class="example-table"
-       matSort matSortActive="created" matSortDisableClear matSortDirection="desc" >
+<table mat-table [dataSource]="dataSource" class="example-table">
 
   <ng-container [matColumnDef]="column.keyName" *ngFor="let column of tableElements.columns;">
     <th mat-header-cell *matHeaderCellDef class="text-center"><span>{{column.label}}</span></th>
@@ -9,4 +8,4 @@
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
   <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
 </table>
-<mat-paginator [length]="resultsLength" [pageSize]="5" aria-label="Select page of GitHub search results"></mat-paginator>
+<mat-paginator [length]="resultsLength" [pageSize]="10"></mat-paginator>

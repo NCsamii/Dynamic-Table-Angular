@@ -1,8 +1,9 @@
 import {AfterViewInit, Component, Input, OnInit, ViewChild} from '@angular/core';
 import {Table} from "../../shared/interfaces/table";
 import {TableService} from "../../shared/services/table.service";
-import {BehaviorSubject, switchMap} from "rxjs";
+import {BehaviorSubject, catchError, map, of, startWith, switchMap} from "rxjs";
 import {MatPaginator} from "@angular/material/paginator";
+import {MatTableDataSource} from "@angular/material/table";
 
 
 @Component({
@@ -10,7 +11,7 @@ import {MatPaginator} from "@angular/material/paginator";
   templateUrl: './table.component.html',
   styleUrls: ['./table.component.sass']
 })
-export class TableComponent implements OnInit ,AfterViewInit{
+export class TableComponent implements OnInit, AfterViewInit {
   displayedColumns: string[] = [];
   tableElements: Table;
   dataSource: any;
@@ -19,6 +20,7 @@ export class TableComponent implements OnInit ,AfterViewInit{
   params = new BehaviorSubject({})
   params$ = this.params.asObservable()
   @ViewChild(MatPaginator) paginator: MatPaginator;
+
   @Input() set tableData(table: Table) {
     this.tableElements = table
     this.displayedColumns = this.displayedColumns.concat(table.columns.map((x: any) => x.keyName))
@@ -43,13 +45,28 @@ export class TableComponent implements OnInit ,AfterViewInit{
   }
 
   getData() {
-    console.log(2 , this.paginator.pageIndex)
-    this.params$.pipe(switchMap(() => {
-      return this.apiService.getData(this.tableElements.url, this.tableElements.offset, this.tableElements.limit)
-    })).subscribe((response: any) => {
-      this.resultsLength = response.length;
-      this.dataSource = response
-    })
+    this.paginator.page
+      .pipe(
+        startWith({}),
+        switchMap(() => {
+          return this.apiService.getData(this.tableElements.url, this.paginator.pageIndex + 1, this.paginator.pageSize)
+            .pipe(catchError(() => of(null)));
+        }),
+        map((empData) => {
+          if (empData == null) return [];
+          this.resultsLength = empData.length;
+          return empData;
+        })
+      )
+      .subscribe((empData) => {
+        this.dataSource = empData
+      });
+    // this.params$.pipe(switchMap(() => {
+    //   return this.apiService.getData(this.tableElements.url, this.tableElements.offset, this.tableElements.limit)
+    // })).subscribe((response: any) => {
+    //   this.resultsLength = response.length;
+    //   this.dataSource = response
+    // })
 
   }
 

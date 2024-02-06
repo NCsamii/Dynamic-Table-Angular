@@ -13,8 +13,8 @@ export class TableService {
   constructor(private http: HttpClient) {
   }
 
-  getData(url: string, offset: number | undefined, limit: number | undefined) {
-    return this.http.get<any>(url)
+  getData(url: string, page: number | undefined, limit: number | undefined) {
+    return this.http.get<any>(`${url}?page=${page}&limit=${limit}`)
   }
 
   public refreshTable(value: any) {
