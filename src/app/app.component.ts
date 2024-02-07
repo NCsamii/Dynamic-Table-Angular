@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
 import {Table} from "../shared/interfaces/table";
 
 @Component({
@@ -8,14 +8,11 @@ import {Table} from "../shared/interfaces/table";
 })
 export class AppComponent {
   title = 'dynamicTable';
-  columns = [
-    {
-      name: 'id',
-      displayName: 'شناسه'
-    }]
-  tableData:Table = {
+  tableData: Table = {
     columns: [
-      {keyName: 'id', label: 'شناسه'}
+      {keyName: 'id', label: 'شناسه'},
+      {keyName: 'name', label: 'نام و نام خانوادگی'},
+      {keyName: 'createdAt', label: 'تاریخ'},
     ],
     url: 'https://65c0823a25a83926ab966927.mockapi.io/api/v1/users'
   }
