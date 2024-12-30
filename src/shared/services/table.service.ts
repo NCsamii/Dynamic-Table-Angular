@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {Subject} from "rxjs";
 import {T} from "@angular/cdk/keycodes";
-import { HttpClient } from "@angular/common/http";
+import {HttpClient} from "@angular/common/http";
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +17,4 @@ export class TableService {
     return this.http.get<any>(`${url}?page=${page}&limit=${limit}`)
   }
 
-  public refreshTable(value: any) {
-    this.refreshObject.next(value)
-  }
 }

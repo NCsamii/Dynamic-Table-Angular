@@ -1,10 +1,9 @@
 import {AfterViewInit, Component, Input, OnInit, ViewChild} from '@angular/core';
-import {Table} from "../../shared/interfaces/table";
+import {DataSource, Table, TableColumn} from "../../shared/interfaces/table";
 import {TableService} from "../../shared/services/table.service";
 import {BehaviorSubject, catchError, map, of, startWith, switchMap} from "rxjs";
 import {MatPaginator} from "@angular/material/paginator";
 import {MatTableDataSource} from "@angular/material/table";
-
 
 @Component({
   selector: 'app-table',
@@ -15,16 +14,13 @@ import {MatTableDataSource} from "@angular/material/table";
 export class TableComponent implements OnInit, AfterViewInit {
   displayedColumns: string[] = [];
   tableElements: Table;
-  dataSource: any;
-  columns: any[] = []
+  dataSource: DataSource[];
   resultsLength = 0;
-  params = new BehaviorSubject({})
-  params$ = this.params.asObservable()
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
   @Input() set tableData(table: Table) {
     this.tableElements = table
-    this.displayedColumns = this.displayedColumns.concat(table.columns.map((x: any) => x.keyName))
+    this.displayedColumns = this.displayedColumns.concat(table.columns.map((x: TableColumn) => x.keyName))
   }
 
   constructor(private apiService: TableService) {
@@ -34,16 +30,16 @@ export class TableComponent implements OnInit, AfterViewInit {
 
   }
 
-  getNestedValue(obj: any, column: any, path: string): any {
-    const keys = path.split('.')
+  public getNestedValue(obj: DataSource, column: TableColumn, path: string): DataSource | string {
+    const keys: (keyof DataSource)[] = path.split('.')
     let data;
-    if (obj[keys[0]] !== null) {
+    if (obj[keys[0]] != null) {
       data = keys.reduce((acc, key) => acc[key], obj);
     }
     return data != null ? data : '-'
   }
 
-  getData() {
+  private getData(): void {
     this.paginator.page
       .pipe(
         startWith({}),
@@ -51,22 +47,15 @@ export class TableComponent implements OnInit, AfterViewInit {
           return this.apiService.getData(this.tableElements.url, this.paginator.pageIndex + 1, this.paginator.pageSize)
             .pipe(catchError(() => of(null)));
         }),
-        map((empData) => {
+        map((empData: DataSource[]) => {
           if (empData == null) return [];
           this.resultsLength = empData.length;
           return empData;
         })
       )
-      .subscribe((empData) => {
+      .subscribe((empData: DataSource[]) => {
         this.dataSource = empData
       });
-    // this.params$.pipe(switchMap(() => {
-    //   return this.apiService.getData(this.tableElements.url, this.tableElements.offset, this.tableElements.limit)
-    // })).subscribe((response: any) => {
-    //   this.resultsLength = response.length;
-    //   this.dataSource = response
-    // })
-
   }
 
   ngAfterViewInit(): void {
