@@ -9,7 +9,8 @@ import {MatTableDataSource} from "@angular/material/table";
 @Component({
   selector: 'app-table',
   templateUrl: './table.component.html',
-  styleUrls: ['./table.component.sass']
+  styleUrls: ['./table.component.sass'],
+  standalone: false
 })
 export class TableComponent implements OnInit, AfterViewInit {
   displayedColumns: string[] = [];

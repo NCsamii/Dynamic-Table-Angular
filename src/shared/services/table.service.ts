@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {Subject} from "rxjs";
 import {T} from "@angular/cdk/keycodes";
-import {HttpClient} from "@angular/common/http";
+import { HttpClient } from "@angular/common/http";
 
 @Injectable({
   providedIn: 'root'
